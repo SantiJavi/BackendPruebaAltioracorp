@@ -1,6 +1,8 @@
 package com.prueba.PruebaTecnica.services;
 
+import com.prueba.PruebaTecnica.entities.Articulo;
 import com.prueba.PruebaTecnica.entities.Orden;
+import com.prueba.PruebaTecnica.repositories.ArticuloRepository;
 import com.prueba.PruebaTecnica.repositories.OrdenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ public class OrdenServiceImpl implements OrdenService{
 
     @Autowired
     private OrdenRepository repository;
+    @Autowired
+    private ArticuloRepository repositoryArticulo;
     @Transactional(readOnly = true)
     @Override
     public List<Orden> findAll() {
@@ -26,8 +30,21 @@ public class OrdenServiceImpl implements OrdenService{
     }
     @Transactional
     @Override
-    public Orden save(Orden orden) {
-        return repository.save(orden);
+    public Optional<?> save(Orden orden) {
+        Optional<?> optional = null;
+        if(orden.getCantidad() > orden.getArticulo().getStock()){
+            optional = Optional.of("No hay Stock suficiente");
+        }else{
+            Optional<Articulo> articuloOpt = repositoryArticulo.findById(orden.getArticulo().getId());
+            if(articuloOpt.isPresent()){
+                Articulo articuloDb = articuloOpt.orElseThrow();
+                Integer stockActualizado = articuloDb.getStock() - orden.getCantidad();
+                articuloDb.setStock(stockActualizado);
+                repositoryArticulo.save(articuloDb);
+                optional= Optional.of(repository.save(orden));
+            }
+        }
+        return optional;
     }
     @Transactional
     @Override
@@ -39,6 +56,7 @@ public class OrdenServiceImpl implements OrdenService{
             ordenDb.setFecha(orden.getFecha());
             ordenDb.setArticulo(orden.getArticulo());
             ordenDb.setCliente(orden.getCliente());
+            ordenDb.setCantidad(orden.getCantidad());
             return Optional.of(repository.save(ordenDb));
         }
         return ordenOptional;

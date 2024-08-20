@@ -13,12 +13,12 @@ public class Articulo {
     private Long id;
     private String codigo;
     private String nombre;
+    private Integer stock;
     @Column(name = "precio_unitario")
     private double precioUnitario;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "articuloId")
     private List<Orden>ordenes;
-
 
 
 
@@ -29,11 +29,12 @@ public class Articulo {
         this.id = id;
     }
 
-    public Articulo(Long id, String codigo, String nombre, double precioUnitario) {
+    public Articulo(Long id, String codigo, String nombre, double precioUnitario, Integer stock) {
         this.id = id;
         this.codigo = codigo;
         this.nombre = nombre;
         this.precioUnitario = precioUnitario;
+        this.stock = stock;
     }
 
     public Long getId() {
@@ -68,4 +69,12 @@ public class Articulo {
         this.precioUnitario = precioUnitario;
     }
 
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
 }

@@ -25,10 +25,10 @@ public class ArticuloServiceImpl implements ArticuloService{
     public Optional<Articulo> findById(Long id) {
         return repository.findById(id);
     }
-
     @Transactional
     @Override
     public Articulo save(Articulo articulo) {
+
         return repository.save(articulo);
     }
 
@@ -41,6 +41,7 @@ public class ArticuloServiceImpl implements ArticuloService{
             articuloDb.setCodigo(articulo.getCodigo());
             articuloDb.setNombre(articulo.getNombre());
             articuloDb.setPrecioUnitario(articulo.getPrecioUnitario());
+            articuloDb.setStock(articulo.getStock());
             return Optional.of(repository.save(articuloDb));
         }
         return articuloOptional;

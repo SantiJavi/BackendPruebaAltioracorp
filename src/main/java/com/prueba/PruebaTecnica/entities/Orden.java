@@ -14,6 +14,8 @@ public class Orden {
     @Column(name = "codigo_ordenes")
     private String codigoOrdenes;
     private Date fecha;
+
+    private Integer cantidad;
     @ManyToOne
     @JoinColumn(name = "clienteId")
     private Cliente cliente;
@@ -29,10 +31,11 @@ public class Orden {
         this.id = id;
     }
 
-    public Orden(Long id, String codigoOrdenes, Date fecha) {
+    public Orden(Long id, String codigoOrdenes, Date fecha, Integer cantidad) {
         this.id = id;
         this.codigoOrdenes = codigoOrdenes;
         this.fecha = fecha;
+        this.cantidad = cantidad;
     }
 
     public Long getId() {
@@ -74,5 +77,13 @@ public class Orden {
 
     public void setArticulo(Articulo articulo) {
         this.articulo = articulo;
+    }
+
+    public Integer getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
     }
 }

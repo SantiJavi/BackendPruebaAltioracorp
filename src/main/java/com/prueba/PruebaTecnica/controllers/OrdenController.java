@@ -35,7 +35,7 @@ public class OrdenController {
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody Orden orden){
-        Orden ordenNew = service.save(orden);
+        Optional<?> ordenNew = service.save(orden);
         return ResponseEntity.status(HttpStatus.CREATED).body(ordenNew);
     }
 
